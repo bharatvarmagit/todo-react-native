@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Button} from "react-native";
+import { StyleSheet, Text, View, Button, Pressable, TouchableOpacity} from "react-native";
 
 const Header = (props) => {
   const onAdd = () => {
@@ -17,10 +17,12 @@ const Header = (props) => {
 
   return (
     <View style={styles.titleContainer}>
-      <Text style={styles.title} onPress={resetSearch}>To-Do List App</Text>
+      <TouchableOpacity activeOpacity={0.1} onPress={resetSearch} style={styles.title}>
+        <Text>To-Do List App</Text>
+      </TouchableOpacity>
 
       <View style={styles.btn}>
-        <Button title="search" color="blue" onPress={onSearch}/>
+        <Button title="search" color="blue" onPress={onSearch} />
       </View>
       <View style={styles.btn}>
         <Button title="add" color="blue" onPress={onAdd} />

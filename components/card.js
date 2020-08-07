@@ -2,7 +2,6 @@ import { StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
 const Card = props =>{
-  const noItems="No items present";
 
   const removeTask=task=>{
     props.delTask(task);
@@ -26,8 +25,8 @@ const styles = StyleSheet.create({
 
   },
   cardContainer: {
-
-    borderColor: "black",
+    width:"50%",
+    borderColor: '#768753',
     shadowColor: "black",
     shadowOffset: {
       width: 0,

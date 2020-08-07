@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View,Text, ImagePropTypes } from "react-native";
+import { StyleSheet, View,Text, ImagePropTypes, ScrollView } from "react-native";
 import Card from "./components/card";
 import Header from "./components/header";
 import TaskAdder from "./components/taskadder";
@@ -67,6 +67,7 @@ export default function App() {
           searchclose={searchcloser}
         />
       )}
+
       {searchedTasks.length > 0
         ? searchedTasks.map((taskitem) => (
             <Card key={taskitem} task={taskitem} />
