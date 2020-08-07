@@ -71,9 +71,13 @@ export default function App() {
         ? searchedTasks.map((taskitem) => (
             <Card key={taskitem} task={taskitem} />
           ))
-        : tasks.map((taskitem) => (
+        :tasks.length>0? tasks.map((taskitem) => (
             <Card key={taskitem} task={taskitem} delTask={delTaskHandler} />
-          ))}
+          )):(
+          <View style={styles.noItems}>
+            <Text >No items Present</Text>
+            </View>
+          )}
     </View>
   );
 }
@@ -84,4 +88,9 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     alignItems: "center",
   },
+  noItems:{
+    flex:1,
+    justifyContent:"center",
+
+  }
 });
