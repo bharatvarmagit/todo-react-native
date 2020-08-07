@@ -31,7 +31,7 @@ const Header = (props) => {
 
 const styles = StyleSheet.create({
   title: {
-    paddingLeft: 100,
+    paddingLeft:100,
     marginVertical: 10,
     textAlign: "center",
     alignItems: "center",
@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
     backgroundColor: "skyblue",
   },
   btn: {
-    width: "17%",
+
+    width: "18%",
     textDecorationColor:"white",
   },
 });
