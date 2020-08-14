@@ -28,7 +28,7 @@ const Search = (props) => {
         />
 
       <View style={styles.buttonContainer}>
-        <Button title="search" onPress={searchBtnHandler} />
+        <Button title="Search" onPress={searchBtnHandler} />
       </View>
     </View>
   );

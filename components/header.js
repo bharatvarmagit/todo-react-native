@@ -11,14 +11,14 @@ const Header = (props) => {
     props.searcher();
   };
   const resetSearch = () => {
-    console.log("search reset")
+    // console.log("search reset")
     props.resetsearch();
   };
 
   return (
     <View style={styles.titleContainer}>
       <TouchableOpacity activeOpacity={0.1} onPress={resetSearch} style={styles.title}>
-        <Text>To-Do List App</Text>
+        <Text style={styles.titleText}>To-Do List App</Text>
       </TouchableOpacity>
 
       <View style={styles.btn}>
@@ -32,13 +32,15 @@ const Header = (props) => {
 };
 
 const styles = StyleSheet.create({
+  titleText:{
+    fontSize:20
+  },
   title: {
     paddingLeft:100,
     marginVertical: 10,
     textAlign: "center",
     alignItems: "center",
     width: "60%",
-    fontSize: 20,
     color: "black",
   },
   titleContainer: {

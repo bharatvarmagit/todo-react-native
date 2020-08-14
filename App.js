@@ -1,47 +1,87 @@
-import React, { useState } from "react";
-import { StyleSheet, View,Text, ImagePropTypes, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text } from "react-native";
 import Card from "./components/card";
 import Header from "./components/header";
 import TaskAdder from "./components/taskadder";
 import Search from "./components/search";
+import { Firestore } from "./config/firebase";
 
 export default function App() {
   const [searchedTasks, setSearchedTasks] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [searchVisible,setSearchVisible]=useState(false);
-  const [adderVisible,setAdderVisible]=useState(false);
+  const [searchVisible, setSearchVisible] = useState(false);
+  const [adderVisible, setAdderVisible] = useState(false);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const tasksRef = Firestore.collection("tasks");
+      const snapshot = await tasksRef.get();
+      const fetchedTasks=[];
+      await snapshot.forEach((doc) => {
+        let task={};
+        task.id=doc.id;
+        task.name=doc.data().name;
+        task.priority=doc.data().priority;
+        fetchedTasks.push(task);
+      })
+      setTasks([...fetchedTasks]);
+    };
+    console.log("fetching tasks");
+    fetchTasks();
+  }, []);
+
   const taskAdderHandler = (task) => {
-    setTasks([...tasks, task.trim()]);
+    let obj = {
+      name: task.trim(),
+      priority: 1,
+    };
+    Firestore.collection("tasks").add(obj);
+    obj.id = Math.floor(Math.random() * 99999 + 1).toString();
+    setTasks([...tasks, obj]);
   };
-  const addercloser=()=>{
+
+  const addercloser = () => {
     setAdderVisible(false);
   };
-   const adderopener = () => {
-     setAdderVisible(true);
-   };
-   const searchcloser=()=>{
-     setSearchVisible(false)
-   };
-   const searchopener=()=>{
-     setSearchVisible(true)
-   };
-  const resetSearchHandler=()=>{
+
+  const adderopener = () => {
+    setAdderVisible(true);
+  };
+
+  const searchcloser = () => {
+    setSearchVisible(false);
+  };
+
+  const searchopener = () => {
+    setSearchVisible(true);
+  };
+
+  const resetSearchHandler = () => {
     setSearchedTasks([]);
   };
-  const delTaskHandler=(task)=>{
-    console.log("deleting",task)
-    const updatredtasks=tasks.filter(t=>t!==task);
-    setTasks([...updatredtasks]);
-  }
-  const taskSearchHandler=task=>{
-    const items=[];
-    for (let t of tasks){
-      if(t.toLowerCase().includes(task.toLowerCase())){
+
+  const delTaskHandler = async (task) => {
+    // console.log("deleting",task)
+    const updatedtasks = tasks.filter((t) => t!== task);
+    setTasks([...updatedtasks]);
+    let querySnapshot = await Firestore
+      .collection("tasks")
+      .where("name", "==", task.name).get();
+    querySnapshot.forEach(doc=>{
+      doc.ref.delete();
+    })
+  };
+
+  const taskSearchHandler = (task) => {
+    const items = [];
+    for (let t of tasks) {
+      if (t.name.toLowerCase().includes(task.toLowerCase())) {
         items.push(t);
       }
     }
-    setSearchedTasks([...searchedTasks,...items])
-  }
+    setSearchedTasks([...items]);
+  };
+
   return (
     <View style={styles.container}>
       <Header
@@ -68,17 +108,17 @@ export default function App() {
         />
       )}
 
-      {searchedTasks.length > 0
-        ? searchedTasks.map((taskitem) => (
-            <Card key={taskitem} task={taskitem} />
-          ))
-        :tasks.length>0? tasks.map((taskitem) => (
-            <Card key={taskitem} task={taskitem} delTask={delTaskHandler} />
-          )):(
-          <View style={styles.noItems}>
-            <Text >No items Present</Text>
-            </View>
-          )}
+      {searchedTasks.length > 0 ? (
+        searchedTasks.map((taskitem) => <Card key={taskitem.id} task={taskitem} />)
+      ) : tasks.length > 0 ? (
+        tasks.map((taskitem) => (
+          <Card key={taskitem.id} task={taskitem} delTask={delTaskHandler} />
+        ))
+      ) : (
+        <View style={styles.noItems}>
+          <Text>No items Present</Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -89,9 +129,8 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     alignItems: "center",
   },
-  noItems:{
-    flex:1,
-    justifyContent:"center",
-
-  }
+  noItems: {
+    flex: 1,
+    justifyContent: "center",
+  },
 });

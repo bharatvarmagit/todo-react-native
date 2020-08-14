@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 
 const Card = props =>{
@@ -9,10 +9,9 @@ const Card = props =>{
   }
   return (
     <View style={styles.cardContainer}>
-      <Text style={styles.card}
-            onLongPress={removeTask.bind(this,props.task)}>
-        {props.task}
-      </Text>
+      <TouchableOpacity onLongPress={removeTask.bind(this, props.task)}>
+        <Text style={styles.card}>{props.task.name}</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -25,15 +24,15 @@ const styles = StyleSheet.create({
 
   },
   cardContainer: {
-    width:"50%",
-    borderColor: '#768753',
+    backgroundColor:"white",
+    borderColor: "black",
     shadowColor: "black",
     shadowOffset: {
-      width: 0,
+      width: 1,
       height: 1,
     },
-    shadowOpacity: 0.48,
-    shadowRadius: 1.00,
+    shadowOpacity: 0.55,
+    shadowRadius: 3.00,
 
     elevation: 3,
     width: '70%',
