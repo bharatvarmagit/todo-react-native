@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
 import Card from "./components/card";
 import Header from "./components/header";
 import TaskAdder from "./components/taskadder";
@@ -84,6 +84,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.centered}>
       <Header
         adder={adderopener}
         searcher={searchopener}
@@ -107,18 +108,22 @@ export default function App() {
           searchclose={searchcloser}
         />
       )}
-
-      {searchedTasks.length > 0 ? (
-        searchedTasks.map((taskitem) => <Card key={taskitem.id} task={taskitem} />)
-      ) : tasks.length > 0 ? (
-        tasks.map((taskitem) => (
-          <Card key={taskitem.id} task={taskitem} delTask={delTaskHandler} />
-        ))
-      ) : (
-        <View style={styles.noItems}>
-          <Text>No items Present</Text>
-        </View>
-      )}
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {searchedTasks.length > 0 ? (
+          searchedTasks.map((taskitem) => (
+            <Card key={taskitem.id} task={taskitem} />
+          ))
+        ) : tasks.length > 0 ? (
+          tasks.map((taskitem) => (
+            <Card key={taskitem.id} task={taskitem} delTask={delTaskHandler} />
+          ))
+        ) : (
+          <View style={styles.noItems}>
+            <Text>No items Present</Text>
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 }
@@ -127,7 +132,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 40,
-    alignItems: "center",
+
+  },
+  centered:{
+    alignItems:"center",
+  },
+  scrollContainer:{
+    alignItems:"center",
+    minWidth:1
   },
   noItems: {
     flex: 1,
