@@ -62,8 +62,13 @@ export default function App() {
 
   const delTaskHandler = async (task) => {
     // console.log("deleting",task)
-    const updatedtasks = tasks.filter((t) => t!== task);
+    let updatedtasks = tasks.filter((t) => t!== task);
     setTasks([...updatedtasks]);
+    if(searchedTasks.length>0){
+      let updateSearchedtasks = searchedTasks.filter((t) => t !== task);
+      setSearchedTasks([...updateSearchedtasks]);
+    }
+
     let querySnapshot = await Firestore
       .collection("tasks")
       .where("name", "==", task.name).get();
@@ -85,34 +90,34 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.centered}>
-      <Header
-        adder={adderopener}
-        searcher={searchopener}
-        adderclose={addercloser}
-        searchclose={searchcloser}
-        resetsearch={resetSearchHandler}
-      />
-
-      {adderVisible && (
-        <TaskAdder
-          addtask={taskAdderHandler}
-          tasks={tasks}
-          visibility={adderVisible}
+        <Header
+          adder={adderopener}
+          searcher={searchopener}
           adderclose={addercloser}
-        />
-      )}
-      {searchVisible && (
-        <Search
-          searchtasks={taskSearchHandler}
-          visibility={searchVisible}
           searchclose={searchcloser}
+          resetsearch={resetSearchHandler}
         />
-      )}
+
+        {adderVisible && (
+          <TaskAdder
+            addtask={taskAdderHandler}
+            tasks={tasks}
+            visibility={adderVisible}
+            adderclose={addercloser}
+          />
+        )}
+        {searchVisible && (
+          <Search
+            searchtasks={taskSearchHandler}
+            visibility={searchVisible}
+            searchclose={searchcloser}
+          />
+        )}
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {searchedTasks.length > 0 ? (
           searchedTasks.map((taskitem) => (
-            <Card key={taskitem.id} task={taskitem} />
+            <Card key={taskitem.id} task={taskitem} delTask={delTaskHandler} />
           ))
         ) : tasks.length > 0 ? (
           tasks.map((taskitem) => (

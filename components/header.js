@@ -13,6 +13,8 @@ const Header = (props) => {
   const resetSearch = () => {
     // console.log("search reset")
     props.resetsearch();
+    props.adderclose();
+    props.searchclose();
   };
 
   return (
